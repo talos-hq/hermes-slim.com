@@ -55,8 +55,8 @@
         <li>Paste this and press <kbd>Enter</kbd>:</li>
       </ol>
       <div class="cmd big">
+        <div class="cmd-bar"><span class="cmd-shell" id="main-shell">Terminal</span><button class="copy">Copy</button></div>
         <code id="main-cmd"></code>
-        <button class="copy" data-copy-target="main-cmd">Copy</button>
       </div>
       <p class="main-after">Then follow the questions in the terminal. The installer picks the right bundle for your machine, checks its SHA-256 and resumes if your connection drops.</p>
       <div class="main-actions">
@@ -90,15 +90,18 @@
 
 <template id="card-tpl">
   <article class="card">
+    <span class="badge" hidden>This computer</span>
     <div class="card-head">
       <span class="os-glyph" aria-hidden="true"></span>
       <div>
         <h3 class="card-os"></h3>
         <p class="card-who"></p>
       </div>
-      <span class="badge" hidden>This computer</span>
     </div>
-    <div class="cmd"><code></code><button class="copy">Copy</button></div>
+    <div class="cmd">
+      <div class="cmd-bar"><span class="cmd-shell">Terminal</span><button class="copy">Copy</button></div>
+      <code></code>
+    </div>
     <a class="btn" href="#"><span class="btn-label">Download</span> <span class="size"></span></a>
     <p class="card-manual"></p>
   </article>

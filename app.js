@@ -1,9 +1,14 @@
 // Platform detection, per-platform cards and live release assets for hermes-slim.com.
 // The page works without the GitHub API: FALLBACK holds the last known release.
 const REPO = "talos-hq/hermes-slim";
-const RAW = `https://raw.githubusercontent.com/${REPO}/main/slim`;
-const SH_CMD = `curl -fsSL ${RAW}/install.sh | sh`;
-const PS_CMD = `& ([scriptblock]::Create((irm ${RAW}/install.ps1)))`;
+const SITE = "https://hermes-slim.com";
+// Short wrappers served by this site; each fetches slim/install.{sh,ps1} from main.
+const CMD = {
+  mac: `curl -fsSL ${SITE}/macos/install.sh | sh`,
+  linux: `curl -fsSL ${SITE}/linux/install.sh | sh`,
+  win: `irm ${SITE}/windows/install.ps1 | iex`,
+};
+const SHELL = { mac: "Terminal", linux: "Terminal", win: "PowerShell" };
 
 const FALLBACK = {
   tag: "v0.1.1",
@@ -39,15 +44,13 @@ const STEP1 = {
   linux: "Open a terminal.",
 };
 
-const cmdFor = (p) => (p.family === "win" ? PS_CMD : SH_CMD);
+const cmdFor = (p) => CMD[p.family];
 const mb = (n) => `${Math.round(n / 1e6)} MB`;
 const assetUrl = (tag, name) => `https://github.com/${REPO}/releases/download/${tag}/${name}`;
 
-function manualText(p, file) {
-  if (p.family === "win") {
-    return `Offline install: download the zip, then run <code>install.ps1 -Archive ${file}</code>.`;
-  }
-  return `Offline install: download the bundle, then run <code>sh install.sh --archive ${file}</code>.`;
+function manualText(p) {
+  const flag = p.family === "win" ? "-Archive" : "--archive";
+  return `Offline? Download the ${p.family === "win" ? "zip" : "bundle"}, then run the installer with <code>${flag} &lt;file&gt;</code>.`;
 }
 
 async function detect() {
@@ -112,12 +115,13 @@ function render(rel, here) {
     node.querySelector(".card-who").textContent = p.who;
     const code = node.querySelector(".cmd code");
     code.textContent = cmdFor(p);
-    wireCopy(node.querySelector(".cmd .copy"), () => code.textContent);
+    wireCopy(node.querySelector(".copy"), () => code.textContent);
     const btn = node.querySelector(".btn");
     btn.href = assetUrl(rel.tag, file);
     btn.querySelector(".btn-label").textContent = p.family === "win" ? "Download .zip" : "Download bundle";
     btn.querySelector(".size").textContent = mb(size);
-    node.querySelector(".card-manual").innerHTML = manualText(p, file);
+    node.querySelector(".card-manual").innerHTML = manualText(p);
+    node.querySelector(".cmd-shell").textContent = SHELL[p.family];
     if (here && here.id === p.id) {
       card.classList.add("here");
       node.querySelector(".badge").hidden = false;
@@ -144,6 +148,7 @@ function renderMain(rel, here) {
   document.getElementById("main-step1").innerHTML = STEP1[p.family];
   const cmd = document.getElementById("main-cmd");
   cmd.textContent = cmdFor(p);
+  document.getElementById("main-shell").textContent = SHELL[p.family];
   wireCopy(document.querySelector("#main-card .copy"), () => cmd.textContent);
   const link = document.getElementById("main-bundle");
   link.href = assetUrl(rel.tag, file);
