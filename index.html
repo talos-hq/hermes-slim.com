@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>hermes-slim — Download Hermes Agent for macOS, Windows and Linux</title>
+<meta name="description" content="hermes-slim is a fast, prebuilt install of the Hermes Agent. Pick your computer, copy one line, done. No compilers, no package managers.">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<meta property="og:title" content="hermes-slim — Download Hermes Agent">
+<meta property="og:description" content="One prebuilt download per platform. Pick your computer, copy one line, done.">
+<meta property="og:image" content="https://hermes-slim.com/assets/og.jpg">
+<meta property="og:url" content="https://hermes-slim.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#000000">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><img src="/favicon.png" alt="" width="28" height="28">hermes-slim</a>
+  <nav>
+    <a href="#download">Download</a>
+    <a href="#all">All platforms</a>
+    <a href="#why">Why slim</a>
+    <a href="https://github.com/talos-hq/hermes-slim">GitHub</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <img class="hero-icon" src="/assets/icon-1024.jpg" srcset="/assets/icon-512.jpg 512w, /assets/icon-1024.jpg 1024w" sizes="(max-width: 800px) 70vw, 420px" alt="hermes-slim icon: a woman in a city-reflecting visor and headphones" width="420" height="420">
+    <div class="hero-text">
+      <p class="eyebrow">Hermes Agent, prebuilt</p>
+      <h1>Your personal AI agent.<br>One download.</h1>
+      <p class="lede">hermes-slim is the <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> packed into a single
+        ready-to-run bundle for your computer. Nothing compiles, no package manager runs, and setup takes about a minute.</p>
+    </div>
+  </section>
+
+  <section id="download" class="pick" aria-labelledby="pick-title">
+    <h2 id="pick-title">Download for <span id="detected-name">your computer</span></h2>
+    <p class="detect-note" id="detect-note">Pick your computer below. Not sure which one? Each card says who it's for.</p>
+
+    <div class="main-card" id="main-card" hidden>
+      <div class="main-card-head">
+        <span class="os-glyph" id="main-glyph" aria-hidden="true"></span>
+        <div>
+          <div class="main-os" id="main-os"></div>
+          <div class="main-who" id="main-who"></div>
+        </div>
+      </div>
+      <ol class="steps">
+        <li><span id="main-step1"></span></li>
+        <li>Paste this and press <kbd>Enter</kbd>:</li>
+      </ol>
+      <div class="cmd big">
+        <code id="main-cmd"></code>
+        <button class="copy" data-copy-target="main-cmd">Copy</button>
+      </div>
+      <p class="main-after">Then follow the questions in the terminal. The installer picks the right bundle for your machine, checks its SHA-256 and resumes if your connection drops.</p>
+      <div class="main-actions">
+        <a id="main-bundle" class="btn-big" href="#">⬇ <span id="main-label">Download bundle</span> <span id="main-size" class="size"></span></a>
+        <p class="main-alt">For offline installs and mirrors. <a href="#all">Other platforms</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="all" class="all" aria-labelledby="all-title">
+    <h2 id="all-title">Every platform</h2>
+    <div class="grid" id="grid"></div>
+    <p class="release-line">Release <a id="release-tag" href="https://github.com/talos-hq/hermes-slim/releases/latest">latest</a>
+      · <a href="https://github.com/talos-hq/hermes-slim/releases">all releases</a> · every bundle ships a <code>.sha256</code> next to it.</p>
+  </section>
+
+  <section id="why" class="why" aria-labelledby="why-title">
+    <h2 id="why-title">Why slim</h2>
+    <div class="why-grid">
+      <div><h3>One file, already built</h3><p>CPython, Hermes and every dependency come prebuilt in one archive. Your machine never compiles anything or downloads packages one by one.</p></div>
+      <div><h3>Antivirus-friendly</h3><p>No chain of package managers pulling dozens of files at install time, the pattern security tools flag.</p></div>
+      <div><h3>Fast and resumable</h3><p>The download uses 8 parallel connections and picks up where it stopped. Unpacking on Windows takes seconds, not minutes.</p></div>
+      <div><h3>Ready on first launch</h3><p>Setup asks a few questions, wires up the model provider and starts the gateway as a service, so Hermes is running when setup ends.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>hermes-slim is a community build of <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> by Nous Research, maintained at <a href="https://github.com/talos-hq/hermes-slim">talos-hq/hermes-slim</a>. Not affiliated with Nous Research.</p>
+</footer>
+
+<template id="card-tpl">
+  <article class="card">
+    <div class="card-head">
+      <span class="os-glyph" aria-hidden="true"></span>
+      <div>
+        <h3 class="card-os"></h3>
+        <p class="card-who"></p>
+      </div>
+      <span class="badge" hidden>This computer</span>
+    </div>
+    <div class="cmd"><code></code><button class="copy">Copy</button></div>
+    <a class="btn" href="#"><span class="btn-label">Download</span> <span class="size"></span></a>
+    <p class="card-manual"></p>
+  </article>
+</template>
+
+<script src="/app.js" defer></script>
+</body>
+</html>
