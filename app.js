@@ -4,11 +4,9 @@ const REPO = "talos-hq/hermes-slim";
 const SITE = "https://hermes-slim.com";
 // Short wrappers served by this site; each fetches slim/install.{sh,ps1} from main.
 const CMD = {
-  mac: `curl -fsSL ${SITE}/macos/install.sh | sh`,
-  linux: `curl -fsSL ${SITE}/linux/install.sh | sh`,
-  win: `irm ${SITE}/windows/install.ps1 | iex`,
+  shell: `curl -fsSL ${SITE}/install.sh | sh`,
+  powershell: `irm ${SITE}/windows/install.ps1 | iex`,
 };
-const SHELL = { mac: "Terminal", linux: "Terminal", win: "PowerShell" };
 
 const FALLBACK = {
   tag: "v0.1.1",
@@ -44,7 +42,7 @@ const STEP1 = {
   linux: "Open a terminal.",
 };
 
-const cmdFor = (p) => CMD[p.family];
+const cmdFor = (p) => p.family === "win" ? CMD.powershell : CMD.shell;
 const mb = (n) => `${Math.round(n / 1e6)} MB`;
 const assetUrl = (tag, name) => `https://github.com/${REPO}/releases/download/${tag}/${name}`;
 
@@ -118,10 +116,8 @@ function render(rel, here) {
     wireCopy(node.querySelector(".copy"), () => code.textContent);
     const btn = node.querySelector(".btn");
     btn.href = assetUrl(rel.tag, file);
-    btn.querySelector(".btn-label").textContent = p.family === "win" ? "Download .zip" : "Download bundle";
     btn.querySelector(".size").textContent = mb(size);
     node.querySelector(".card-manual").innerHTML = manualText(p);
-    node.querySelector(".cmd-shell").textContent = SHELL[p.family];
     if (here && here.id === p.id) {
       card.classList.add("here");
       node.querySelector(".badge").hidden = false;
@@ -148,12 +144,10 @@ function renderMain(rel, here) {
   document.getElementById("main-step1").innerHTML = STEP1[p.family];
   const cmd = document.getElementById("main-cmd");
   cmd.textContent = cmdFor(p);
-  document.getElementById("main-shell").textContent = SHELL[p.family];
   wireCopy(document.querySelector("#main-card .copy"), () => cmd.textContent);
   const link = document.getElementById("main-bundle");
   link.href = assetUrl(rel.tag, file);
   document.getElementById("main-size").textContent = mb(size);
-  document.getElementById("main-label").textContent = p.family === "win" ? "Download .zip" : "Download bundle";
   const note = document.getElementById("detect-note");
   note.innerHTML = here.guessed
     ? 'We think this is an Apple Silicon Mac. On an Intel Mac? <a href="#p-darwin-x64">Use the Intel card</a> — the install command is the same either way.'
