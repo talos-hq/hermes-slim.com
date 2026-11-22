@@ -38,7 +38,7 @@ h3 { margin: 0; }
 .eyebrow { font-family: "Chakra Petch", var(--sans); font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; line-height: .95; white-space: nowrap; font-size: clamp(34px, 7vw, 84px); font-size: clamp(30px, 13.6cqi, 84px); color: var(--text); margin: 0; transform: skewX(-9deg); transform-origin: left bottom; }
 .eyebrow::before { content: ""; display: block; width: 44px; height: 4px; background: var(--red); margin: 0 0 .22em .12em; }
 
-.headline { font-family: "Chakra Petch", var(--sans); font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(22px, 4.2vw, 50px); font-size: clamp(19px, 8.4cqi, 50px); margin: .34em 0 .42em; }
+.headline { font-family: "Chakra Petch", var(--sans); font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(22px, 4.2vw, 50px); font-size: clamp(19px, 8.4cqi, 50px); margin: .72em 0 .42em; }
 .headline > span { display: block; white-space: nowrap; }
 .h-hollow { color: transparent; -webkit-text-stroke: 1.5px var(--text); letter-spacing: .04em; margin: .08em 0 .1em; }
 .h-accent { position: relative; font-size: 1.5em; color: var(--red); margin-left: -.03em; }
