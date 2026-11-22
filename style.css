@@ -6,7 +6,7 @@
   --text: #f2f2f2;
   --dim: #a3a3a3;
   --accent: #ffffff;
-  --red: #ff2430;
+  --mark: #ffffff;
   --mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
   --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, Helvetica, Arial, sans-serif;
 }
@@ -36,20 +36,20 @@ h3 { margin: 0; }
 .hero-text { position: relative; min-width: 0; container-type: inline-size; }
 .hero-text::after { content: ""; position: absolute; top: 0; right: 0; width: 16px; height: 16px; border-top: 2px solid #5a5a5a; border-right: 2px solid #5a5a5a; }
 .eyebrow { font-family: "Chakra Petch", var(--sans); font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; line-height: .95; white-space: nowrap; font-size: clamp(34px, 7vw, 84px); font-size: clamp(30px, 13.6cqi, 84px); color: var(--text); margin: 0; transform: skewX(-9deg); transform-origin: left bottom; }
-.eyebrow::before { content: ""; display: block; width: 44px; height: 4px; background: var(--red); margin: 0 0 .22em .12em; }
+.eyebrow::before { content: ""; display: block; width: 44px; height: 4px; background: var(--mark); margin: 0 0 .22em .12em; }
 
 .headline { font-family: "Chakra Petch", var(--sans); font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(22px, 4.2vw, 50px); font-size: clamp(19px, 8.4cqi, 50px); margin: .72em 0 .42em; }
 .headline > span { display: block; white-space: nowrap; }
 .h-hollow { color: transparent; -webkit-text-stroke: 1.5px var(--text); letter-spacing: .04em; margin: .08em 0 .1em; }
-.h-accent { position: relative; width: fit-content; font-size: 1.6em; color: var(--red); margin-left: -.03em; }
-/* Ghost offset plus glow; the mask cuts one band out so ::before can re-draw it shifted. */
-.h-accent > span { display: block; text-shadow: .045em .028em 0 rgba(255,255,255,.27), 0 0 .38em rgba(255,36,48,.5); -webkit-mask-image: linear-gradient(#000 0 81%, transparent 81% 86%, #000 86%); mask-image: linear-gradient(#000 0 81%, transparent 81% 86%, #000 86%); }
+.h-accent { position: relative; width: fit-content; font-size: 1.6em; color: var(--mark); margin-left: -.03em; }
+/* Ghost offset; the mask cuts one band out so ::before can re-draw it shifted. */
+.h-accent > span { display: block; text-shadow: .045em .028em 0 rgba(255,255,255,.27); -webkit-mask-image: linear-gradient(#000 0 81%, transparent 81% 86%, #000 86%); mask-image: linear-gradient(#000 0 81%, transparent 81% 86%, #000 86%); }
 .h-accent::before { content: attr(data-text); content: attr(data-text) / ""; position: absolute; inset: 0; clip-path: inset(81% -1em 14% -1em); transform: translateX(.14em); text-shadow: .045em .028em 0 rgba(255,255,255,.27); }
 .h-accent::after { content: ""; position: absolute; inset: .12em -.08em .04em -.06em; background: repeating-linear-gradient(to bottom, transparent 0 5px, rgba(5,5,5,.38) 5px 6px); pointer-events: none; }
 
 .byline { position: relative; margin: 0; padding-top: 1.05em; font: 400 clamp(13px, 1.5vw, 17px) var(--mono); letter-spacing: .34em; text-transform: uppercase; color: var(--dim); background: repeating-linear-gradient(to right, #464646 0 1px, transparent 1px 28px) 0 1px / 100% 5px no-repeat, linear-gradient(#464646, #464646) 0 1px / 100% 1px no-repeat; }
-.byline::after { content: ""; position: absolute; left: 0; top: 0; width: 78px; height: 3px; background: var(--red); }
-.byline::before { content: ">"; color: var(--red); font-weight: 700; margin-right: .5em; }
+.byline::after { content: ""; position: absolute; left: 0; top: 0; width: 78px; height: 3px; background: var(--mark); }
+.byline::before { content: ">"; color: var(--mark); font-weight: 700; margin-right: .5em; }
 .byline strong { color: var(--text); font-weight: 700; }
 
 .pick { padding: clamp(24px, 4vw, 48px) 0; }
