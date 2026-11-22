@@ -31,7 +31,7 @@ h3 { margin: 0; }
 
 .hero { display: grid; grid-template-columns: minmax(0, 420px) 1fr; gap: clamp(24px, 5vw, 64px); align-items: center; padding: clamp(32px, 7vw, 88px) 0 clamp(24px, 4vw, 48px); }
 .hero-icon { width: 100%; height: auto; border-radius: 22%; box-shadow: 0 0 0 1px #222, 0 30px 80px rgba(255,255,255,.08); }
-.eyebrow { font: 600 14px var(--mono); text-transform: uppercase; letter-spacing: .14em; color: var(--dim); margin: 0; }
+.eyebrow { font: 600 14px var(--mono); letter-spacing: .14em; color: var(--dim); margin: 0; }
 .lede { font-size: clamp(18px, 1.8vw, 21px); color: #cfcfcf; max-width: 36em; }
 
 .pick { padding: clamp(24px, 4vw, 48px) 0; }
