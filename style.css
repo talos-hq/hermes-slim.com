@@ -41,7 +41,7 @@ h3 { margin: 0; }
 .headline { font-family: "Chakra Petch", var(--sans); font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: .01em; line-height: 1; font-size: clamp(22px, 4.2vw, 50px); font-size: clamp(19px, 8.4cqi, 50px); margin: .72em 0 .42em; }
 .headline > span { display: block; white-space: nowrap; }
 .h-hollow { color: transparent; -webkit-text-stroke: 1.5px var(--text); letter-spacing: .04em; margin: .08em 0 .1em; }
-.h-accent { position: relative; font-size: 1.5em; color: var(--red); margin-left: -.03em; }
+.h-accent { position: relative; width: fit-content; font-size: 1.6em; color: var(--red); margin-left: -.03em; }
 /* Ghost offset plus glow; the mask cuts one band out so ::before can re-draw it shifted. */
 .h-accent > span { display: block; text-shadow: .045em .028em 0 rgba(255,255,255,.27), 0 0 .38em rgba(255,36,48,.5); -webkit-mask-image: linear-gradient(#000 0 81%, transparent 81% 86%, #000 86%); mask-image: linear-gradient(#000 0 81%, transparent 81% 86%, #000 86%); }
 .h-accent::before { content: attr(data-text); content: attr(data-text) / ""; position: absolute; inset: 0; clip-path: inset(81% -1em 14% -1em); transform: translateX(.14em); text-shadow: .045em .028em 0 rgba(255,255,255,.27); }
@@ -105,6 +105,7 @@ footer { border-top: 1px solid var(--line); color: var(--dim); font-size: 14px; 
   .eyebrow { transform-origin: center bottom; }
   .eyebrow::before { margin-left: auto; margin-right: auto; }
   .hero-text::after { display: none; }
+  .h-accent { margin-left: auto; margin-right: auto; }
   .byline { letter-spacing: .22em; }
   .byline::after { left: calc(50% - 39px); }
   .top nav a:not(:first-child):not(:last-child) { display: none; }
