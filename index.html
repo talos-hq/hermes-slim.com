@@ -29,7 +29,7 @@
 
 <main>
   <section class="hero">
-    <img class="hero-icon" src="/assets/icon-1024.jpg" srcset="/assets/icon-512.jpg 512w, /assets/icon-1024.jpg 1024w" sizes="(max-width: 800px) 70vw, 420px" alt="hermes-slim icon: a woman in a city-reflecting visor and headphones" width="420" height="420">
+    <img class="hero-icon" src="/assets/icon-1024.jpg" srcset="/assets/icon-512.jpg 512w, /assets/icon-1024.jpg 1024w" sizes="(max-width: 640px) min(70vw, 320px), (max-width: 1180px) 36vw, 420px" alt="hermes-slim icon: a woman in a city-reflecting visor and headphones" width="420" height="420">
     <div class="hero-text">
       <p class="eyebrow">Hermes-Slim</p>
       <h1 class="headline">Put Hermes <span>on it.</span></h1>
@@ -44,20 +44,24 @@
       <article class="card">
         <h3>Windows</h3>
         <div class="terminal">
-          <p class="terminal-title">PowerShell</p>
+          <div class="terminal-title">
+            <span>PowerShell</span>
+            <button class="copy" type="button">Copy</button>
+          </div>
           <div class="cmd">
             <code>irm https://hermes-slim.com/windows/install.ps1 | iex</code>
-            <button class="copy" type="button">Copy</button>
           </div>
         </div>
       </article>
       <article class="card">
         <h3>Linux and macOS</h3>
         <div class="terminal">
-          <p class="terminal-title">Terminal</p>
+          <div class="terminal-title">
+            <span>Terminal</span>
+            <button class="copy" type="button">Copy</button>
+          </div>
           <div class="cmd">
             <code>curl -fsSL https://hermes-slim.com/install.sh | sh</code>
-            <button class="copy" type="button">Copy</button>
           </div>
         </div>
       </article>
