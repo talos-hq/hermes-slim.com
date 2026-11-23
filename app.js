@@ -1,12 +1,5 @@
-// Platform detection, per-platform cards and live release assets for hermes-slim.com.
-// The page works without the GitHub API: FALLBACK holds the last known release.
-const REPO = "talos-hq/hermes-slim";
-const SITE = "https://hermes-slim.com";
-// Short wrappers served by this site; each fetches slim/install.{sh,ps1} from main.
-const CMD = {
-  shell: `curl -fsSL ${SITE}/install.sh | sh`,
-  powershell: `irm ${SITE}/windows/install.ps1 | iex`,
-};
+// Installer controls and release downloads for hermes-slim.com.
+const RELEASES = "https://github.com/talos-hq/hermes-slim/releases";
 
 const FALLBACK = {
   tag: "v0.1.1",
@@ -20,143 +13,96 @@ const FALLBACK = {
   },
 };
 
-const GLYPH = {
-  mac: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.8-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.6-1-2.6-4.1zM13.9 5c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.2 2-1.1 3.1 1.1.1 2.3-.6 3-1.5z"/></svg>',
-  win: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M2 4.3 10 3.2v7.7H2zM11 3.1 22 1.5v9.4H11zM2 12h8v7.8l-8-1.1zM11 12h11v9.5l-11-1.6z"/></svg>',
-  linux: '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M3 4h18v16H3zm2 2v12h14V6zm2 2.5 4 3-4 3-1.2-1.6L7.9 11.5 5.8 10zm5 5.5h5v2h-5z"/></svg>',
-};
-
-// One entry per release target, in display order.
 const PLATFORMS = [
-  { id: "darwin-arm64", family: "mac", name: "macOS — Apple Silicon", who: "Macs with an M1, M2, M3, M4 or M5 chip. Most Macs sold since late 2020." },
-  { id: "darwin-x64", family: "mac", name: "macOS — Intel", who: "Older Macs with an Intel processor. Check Apple menu › About This Mac: it says “Intel”." },
-  { id: "win32-x64", family: "win", name: "Windows 10 / 11", who: "Any 64-bit Windows PC (Intel or AMD)." },
-  { id: "linux-x64", family: "linux", name: "Linux — x64", who: "Ubuntu, Debian, Fedora, Arch and other glibc distros on Intel/AMD." },
-  { id: "linux-arm64", family: "linux", name: "Linux — ARM64", who: "Raspberry Pi 4/5 (64-bit OS), Ampere, Graviton and other ARM servers." },
-  { id: "linux-x64-musl", family: "linux", name: "Linux — Alpine (musl)", who: "Alpine Linux and other musl-based systems on x64." },
+  { name: "macOS", targets: [
+    { id: "darwin-arm64", label: "Apple Silicon" },
+    { id: "darwin-x64", label: "Intel" },
+  ] },
+  { name: "Linux", targets: [
+    { id: "linux-x64", label: "x64 (glibc)" },
+    { id: "linux-arm64", label: "ARM64 (glibc)" },
+    { id: "linux-x64-musl", label: "x64 (Alpine / musl)" },
+  ] },
+  { name: "Windows", targets: [
+    { id: "win32-x64", label: "x64 (Intel / AMD)" },
+    { id: "win32-arm64", label: "ARM64" },
+  ] },
 ];
 
-const STEP1 = {
-  mac: "Open <b>Terminal</b> (press <kbd>⌘ Space</kbd>, type “Terminal”).",
-  win: "Open <b>PowerShell</b> (press <kbd>Win</kbd>, type “PowerShell”).",
-  linux: "Open a terminal.",
-};
-
-const cmdFor = (p) => p.family === "win" ? CMD.powershell : CMD.shell;
-const mb = (n) => `${Math.round(n / 1e6)} MB`;
-const assetUrl = (tag, name) => `https://github.com/${REPO}/releases/download/${tag}/${name}`;
-
-function manualText(p) {
-  const flag = p.family === "win" ? "-Archive" : "--archive";
-  return `Offline? Download the ${p.family === "win" ? "zip" : "bundle"}, then run the installer with <code>${flag} &lt;file&gt;</code>.`;
-}
-
-async function detect() {
-  const ua = navigator.userAgent;
-  const uad = navigator.userAgentData;
-  let arch = "";
-  if (uad && uad.getHighEntropyValues) {
-    try { arch = (await uad.getHighEntropyValues(["architecture"])).architecture || ""; } catch (_) { /* not exposed */ }
-  }
-  if (/iPhone|iPad|Android/i.test(ua)) return null;
-  if (/Windows/i.test(ua)) return { id: "win32-x64" };
-  if (/Mac OS X|Macintosh/i.test(ua)) {
-    // Safari never reports the CPU; Apple Silicon is by far the common case now.
-    if (arch === "x86") return { id: "darwin-x64" };
-    return { id: "darwin-arm64", guessed: arch !== "arm" };
-  }
-  if (/Linux|X11/i.test(ua)) {
-    if (arch === "arm" || /aarch64|arm64/i.test(ua)) return { id: "linux-arm64" };
-    return { id: "linux-x64" };
-  }
-  return null;
-}
-
-async function release() {
-  try {
-    const r = await fetch(`https://api.github.com/repos/${REPO}/releases/latest`, { headers: { Accept: "application/vnd.github+json" } });
-    if (!r.ok) throw new Error(r.status);
-    const j = await r.json();
-    const assets = {};
-    for (const p of PLATFORMS) {
-      const a = j.assets.find((x) => !x.name.endsWith(".sha256") && x.name.includes(`-${p.id}.`));
-      if (a) assets[p.id] = [a.name, a.size];
-    }
-    if (Object.keys(assets).length) return { tag: j.tag_name, assets: { ...FALLBACK.assets, ...assets } };
-  } catch (_) { /* rate-limited or offline: use the baked release */ }
-  return FALLBACK;
-}
-
-function wireCopy(btn, getText) {
-  btn.addEventListener("click", async () => {
+for (const card of document.querySelectorAll("[data-shell]")) {
+  const button = card.querySelector(".copy");
+  const code = card.querySelector("code");
+  const status = document.getElementById("copy-status");
+  let reset;
+  button.hidden = false;
+  button.addEventListener("click", async () => {
     try {
-      await navigator.clipboard.writeText(getText());
-      btn.textContent = "Copied";
+      await navigator.clipboard.writeText(code.textContent);
+      button.textContent = "Copied";
+      status.textContent = `${card.querySelector("h2").textContent} command copied.`;
     } catch (_) {
-      btn.textContent = "Select & copy";
+      const range = document.createRange();
+      range.selectNodeContents(code);
+      const selection = window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      button.textContent = "Selected";
+      status.textContent = "Command selected. Use your keyboard to copy it.";
     }
-    setTimeout(() => (btn.textContent = "Copy"), 1800);
+    clearTimeout(reset);
+    reset = setTimeout(() => {
+      button.textContent = "Copy";
+      status.textContent = "";
+    }, 1800);
   });
 }
 
-function render(rel, here) {
-  const grid = document.getElementById("grid");
-  const tpl = document.getElementById("card-tpl");
-  grid.textContent = "";
-  for (const p of PLATFORMS) {
-    const [file, size] = rel.assets[p.id];
-    const node = tpl.content.cloneNode(true);
-    const card = node.querySelector(".card");
-    card.id = `p-${p.id}`;
-    node.querySelector(".os-glyph").innerHTML = GLYPH[p.family];
-    node.querySelector(".card-os").textContent = p.name;
-    node.querySelector(".card-who").textContent = p.who;
-    const code = node.querySelector(".cmd code");
-    code.textContent = cmdFor(p);
-    wireCopy(node.querySelector(".copy"), () => code.textContent);
-    const btn = node.querySelector(".btn");
-    btn.href = assetUrl(rel.tag, file);
-    btn.querySelector(".size").textContent = mb(size);
-    node.querySelector(".card-manual").innerHTML = manualText(p);
-    if (here && here.id === p.id) {
-      card.classList.add("here");
-      node.querySelector(".badge").hidden = false;
+async function latestRelease() {
+  const response = await fetch("https://api.github.com/repos/talos-hq/hermes-slim/releases/latest");
+  if (!response.ok) throw new Error(response.status);
+  const release = await response.json();
+  const assets = {};
+  for (const { targets } of PLATFORMS) {
+    for (const { id } of targets) {
+      const bundle = release.assets.find(({ name }) => name.endsWith(`-${id}.zip`))
+        || release.assets.find(({ name }) => name.endsWith(`-${id}.tar.zst`));
+      if (bundle) assets[id] = [bundle.name, bundle.size];
     }
-    grid.appendChild(node);
   }
-  const tag = document.getElementById("release-tag");
-  tag.textContent = rel.tag;
-  tag.href = `https://github.com/${REPO}/releases/tag/${rel.tag}`;
+  return Object.keys(assets).length ? { tag: release.tag_name, assets } : FALLBACK;
 }
 
-function renderMain(rel, here) {
-  if (!here) {
-    document.getElementById("detect-note").textContent =
-      "We couldn't tell which computer you're on. Pick yours below — each card says who it's for.";
-    return;
+function renderBundles({ tag, assets }) {
+  const groups = document.getElementById("bundles");
+  groups.replaceChildren();
+  for (const { name, targets } of PLATFORMS) {
+    const group = document.createElement("section");
+    const heading = document.createElement("h3");
+    const list = document.createElement("ul");
+    heading.textContent = name;
+    for (const { id, label } of targets) {
+      if (!assets[id]) continue;
+      const [file, size] = assets[id];
+      const row = document.createElement("li");
+      const link = document.createElement("a");
+      const meta = document.createElement("span");
+      row.id = `p-${id}`;
+      link.href = `${RELEASES}/download/${tag}/${file}`;
+      link.textContent = label;
+      link.setAttribute("aria-label", `Download ${name} ${label}`);
+      meta.textContent = `${file.endsWith(".zip") ? "ZIP" : "TAR.ZST"} · ${Math.round(size / 1e6)} MB`;
+      link.append(meta);
+      row.append(link);
+      list.append(row);
+    }
+    if (list.childElementCount) {
+      group.append(heading, list);
+      groups.append(group);
+    }
   }
-  const p = PLATFORMS.find((x) => x.id === here.id);
-  const [file, size] = rel.assets[p.id];
-  document.getElementById("detected-name").textContent = p.name;
-  document.getElementById("main-glyph").innerHTML = GLYPH[p.family];
-  document.getElementById("main-os").textContent = p.name;
-  document.getElementById("main-who").textContent = p.who;
-  document.getElementById("main-step1").innerHTML = STEP1[p.family];
-  const cmd = document.getElementById("main-cmd");
-  cmd.textContent = cmdFor(p);
-  wireCopy(document.querySelector("#main-card .copy"), () => cmd.textContent);
-  const link = document.getElementById("main-bundle");
-  link.href = assetUrl(rel.tag, file);
-  document.getElementById("main-size").textContent = mb(size);
-  const note = document.getElementById("detect-note");
-  note.innerHTML = here.guessed
-    ? 'We think this is an Apple Silicon Mac. On an Intel Mac? <a href="#p-darwin-x64">Use the Intel card</a> — the install command is the same either way.'
-    : 'Detected from your browser. Wrong? <a href="#all">Pick another platform</a>.';
-  document.getElementById("main-card").hidden = false;
+  const releaseLink = document.getElementById("release-tag");
+  releaseLink.textContent = tag;
+  releaseLink.href = `${RELEASES}/tag/${tag}`;
 }
 
-(async () => {
-  const [here, rel] = await Promise.all([detect(), release()]);
-  render(rel, here);
-  renderMain(rel, here);
-})();
+latestRelease().catch(() => FALLBACK).then(renderBundles);
