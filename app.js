@@ -10,6 +10,6 @@ function wireCopy(btn, getText) {
   });
 }
 
-for (const command of document.querySelectorAll(".installers .cmd")) {
+for (const command of document.querySelectorAll(".installers .terminal")) {
   wireCopy(command.querySelector(".copy"), () => command.querySelector("code").textContent);
 }
