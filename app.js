@@ -1,13 +1,6 @@
 // Platform detection, per-platform cards and live release assets for hermes-slim.com.
 // The page works without the GitHub API: FALLBACK holds the last known release.
 const REPO = "talos-hq/hermes-slim";
-const SITE = "https://hermes-slim.com";
-// Short wrappers served by this site; each fetches slim/install.{sh,ps1} from main.
-const CMD = {
-  shell: `curl -fsSL ${SITE}/install.sh | sh`,
-  powershell: `irm ${SITE}/windows/install.ps1 | iex`,
-};
-
 const FALLBACK = {
   tag: "v0.1.1",
   assets: {
@@ -36,13 +29,6 @@ const PLATFORMS = [
   { id: "linux-x64-musl", family: "linux", name: "Linux — Alpine (musl)", who: "Alpine Linux and other musl-based systems on x64." },
 ];
 
-const STEP1 = {
-  mac: "Open <b>Terminal</b> (press <kbd>⌘ Space</kbd>, type “Terminal”).",
-  win: "Open <b>PowerShell</b> (press <kbd>Win</kbd>, type “PowerShell”).",
-  linux: "Open a terminal.",
-};
-
-const cmdFor = (p) => p.family === "win" ? CMD.powershell : CMD.shell;
 const mb = (n) => `${Math.round(n / 1e6)} MB`;
 const assetUrl = (tag, name) => `https://github.com/${REPO}/releases/download/${tag}/${name}`;
 
@@ -111,9 +97,6 @@ function render(rel, here) {
     node.querySelector(".os-glyph").innerHTML = GLYPH[p.family];
     node.querySelector(".card-os").textContent = p.name;
     node.querySelector(".card-who").textContent = p.who;
-    const code = node.querySelector(".cmd code");
-    code.textContent = cmdFor(p);
-    wireCopy(node.querySelector(".copy"), () => code.textContent);
     const btn = node.querySelector(".btn");
     btn.href = assetUrl(rel.tag, file);
     btn.querySelector(".size").textContent = mb(size);
@@ -129,34 +112,11 @@ function render(rel, here) {
   tag.href = `https://github.com/${REPO}/releases/tag/${rel.tag}`;
 }
 
-function renderMain(rel, here) {
-  if (!here) {
-    document.getElementById("detect-note").textContent =
-      "We couldn't tell which computer you're on. Pick yours below — each card says who it's for.";
-    return;
-  }
-  const p = PLATFORMS.find((x) => x.id === here.id);
-  const [file, size] = rel.assets[p.id];
-  document.getElementById("detected-name").textContent = p.name;
-  document.getElementById("main-glyph").innerHTML = GLYPH[p.family];
-  document.getElementById("main-os").textContent = p.name;
-  document.getElementById("main-who").textContent = p.who;
-  document.getElementById("main-step1").innerHTML = STEP1[p.family];
-  const cmd = document.getElementById("main-cmd");
-  cmd.textContent = cmdFor(p);
-  wireCopy(document.querySelector("#main-card .copy"), () => cmd.textContent);
-  const link = document.getElementById("main-bundle");
-  link.href = assetUrl(rel.tag, file);
-  document.getElementById("main-size").textContent = mb(size);
-  const note = document.getElementById("detect-note");
-  note.innerHTML = here.guessed
-    ? 'We think this is an Apple Silicon Mac. On an Intel Mac? <a href="#p-darwin-x64">Use the Intel card</a> — the install command is the same either way.'
-    : 'Detected from your browser. Wrong? <a href="#all">Pick another platform</a>.';
-  document.getElementById("main-card").hidden = false;
+for (const command of document.querySelectorAll(".installers .cmd")) {
+  wireCopy(command.querySelector(".copy"), () => command.querySelector("code").textContent);
 }
 
 (async () => {
   const [here, rel] = await Promise.all([detect(), release()]);
   render(rel, here);
-  renderMain(rel, here);
 })();
