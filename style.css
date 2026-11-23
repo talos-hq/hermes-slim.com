@@ -116,3 +116,17 @@ footer { border-top: 1px solid var(--line); color: var(--dim); font-size: 14px; 
   .top nav a:not(:first-child):not(:last-child) { display: none; }
   .grid { grid-template-columns: 1fr; }
 }
+
+.bundles { border-top: 1px solid var(--line); padding: clamp(24px, 3vw, 40px) 0; }
+.bundles h2 { margin: 0; line-height: 1.14; }
+.bundles > p { margin: 8px 0 18px; color: var(--dim); }
+.bundle-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; gap: 12px; }
+.bundle-groups details { border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.bundle-groups summary { padding: 14px 18px; cursor: pointer; font-weight: 700; }
+.bundle-groups ul { list-style: none; padding: 0 16px; margin: 0; }
+.bundle-groups li { border-top: 1px solid var(--line); }
+.bundle-groups a { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 12px 0; font-size: 15px; }
+.bundle-groups small { color: var(--dim); font: 12px var(--mono); white-space: nowrap; }
+@media (max-width: 760px) {
+  .bundle-groups { grid-template-columns: 1fr; gap: 8px; }
+}
