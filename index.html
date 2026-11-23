@@ -22,7 +22,6 @@
   <a class="brand" href="/"><img src="/favicon.png" alt="" width="28" height="28">hermes-slim</a>
   <nav>
     <a href="#download">Download</a>
-    <a href="#all">All platforms</a>
     <a href="#why">Why slim</a>
     <a href="https://github.com/talos-hq/hermes-slim">GitHub</a>
   </nav>
@@ -64,13 +63,6 @@
     </div>
   </section>
 
-  <section id="all" class="all" aria-labelledby="all-title">
-    <h2 id="all-title">Every platform</h2>
-    <div class="grid" id="grid"></div>
-    <p class="release-line">Release <a id="release-tag" href="https://github.com/talos-hq/hermes-slim/releases/latest">latest</a>
-      · <a href="https://github.com/talos-hq/hermes-slim/releases">all releases</a> · every bundle ships a <code>.sha256</code> next to it.</p>
-  </section>
-
   <section id="why" class="why" aria-labelledby="why-title">
     <h2 id="why-title">Why slim</h2>
     <div class="why-grid">
@@ -85,21 +77,6 @@
 <footer>
   <p>hermes-slim is a community build of <a href="https://github.com/NousResearch/hermes-agent">Hermes Agent</a> by Nous Research, maintained at <a href="https://github.com/talos-hq/hermes-slim">talos-hq/hermes-slim</a>. Not affiliated with Nous Research.</p>
 </footer>
-
-<template id="card-tpl">
-  <article class="card">
-    <span class="badge" hidden>This computer</span>
-    <div class="card-head">
-      <span class="os-glyph" aria-hidden="true"></span>
-      <div>
-        <h3 class="card-os"></h3>
-        <p class="card-who"></p>
-      </div>
-    </div>
-    <a class="btn" href="#">Download Bundle <span class="size"></span></a>
-    <p class="card-manual"></p>
-  </article>
-</template>
 
 <script src="/app.js" defer></script>
 </body>

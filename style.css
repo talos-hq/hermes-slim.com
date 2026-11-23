@@ -56,42 +56,8 @@ h3 { margin: 0; }
 .detect-note { color: var(--dim); margin: 0 0 24px; }
 .main-card { background: var(--panel); border: 2px solid var(--accent); border-radius: 20px; padding: clamp(20px, 3.5vw, 40px); }
 .main-card-head { display: flex; gap: 18px; align-items: center; margin-bottom: 18px; }
-.main-card-head .os-glyph { width: 64px; height: 64px; }
-.main-os { font-size: clamp(24px, 3vw, 34px); font-weight: 800; }
-.main-who { color: var(--dim); }
-.steps { margin: 0 0 12px; padding-left: 1.3em; font-size: 19px; }
-.steps li { margin: 4px 0; }
-.main-actions { display: grid; gap: 8px; margin-top: 12px; }
-.btn-big { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; align-items: baseline; background: var(--accent); color: #000; border-radius: 14px; padding: 18px 28px; font-size: 20px; font-weight: 800; text-decoration: none; }
-.btn-big .size { color: #444; }
-.btn-big:hover { background: #d9d9d9; }
-.main-alt { color: var(--dim); margin: 0; font-size: 15px; }
-.size { color: var(--dim); font-weight: 400; }
-
-.cmd { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 8px; background: #000; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
-.cmd code { display: block; padding: 4px 6px; white-space: pre-wrap; overflow-wrap: anywhere; color: #fff; font-size: 14px; line-height: 1.5; }
-.cmd.big code { font-size: clamp(15px, 1.8vw, 20px); padding: 8px 10px; }
-.copy { border: 0; border-radius: 8px; background: var(--accent); color: #000; font: 700 14px var(--sans); padding: 6px 16px; cursor: pointer; }
-.cmd.big .copy { font-size: 15px; padding: 8px 20px; }
-.copy:hover { background: #d9d9d9; }
-
-.os-glyph { display: inline-flex; width: 44px; height: 44px; flex: none; color: var(--text); }
-.os-glyph svg { width: 100%; height: 100%; }
-
-.all { padding: clamp(24px, 4vw, 48px) 0; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 18px; margin-top: 18px; }
+.main-card-head .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(340px, 100%), 1fr)); gap: 18px; margin-top: 18px; }
 .card { position: relative; min-width: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px; scroll-margin-top: 90px; }
-.card.here { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-.card:target { box-shadow: 0 0 0 3px var(--accent); }
-.card-head { display: flex; gap: 14px; align-items: flex-start; position: relative; }
-.card-os { font-size: 21px; }
-.card-who { color: var(--dim); margin: 4px 0 0; font-size: 15px; }
-.badge { align-self: flex-start; margin: -8px 0 -4px; font: 700 12px var(--mono); text-transform: uppercase; letter-spacing: .08em; background: var(--accent); color: #000; padding: 4px 8px; border-radius: 6px; }
-.btn { display: flex; justify-content: center; gap: 8px; align-items: baseline; background: var(--panel-2); border: 1px solid #3a3a3a; border-radius: 12px; padding: 14px; font-weight: 700; font-size: 17px; text-decoration: none; }
-.btn:hover { background: #222; border-color: #666; }
-.card-manual { color: var(--dim); font-size: 13.5px; margin: 0; overflow-wrap: anywhere; }
-.release-line { color: var(--dim); margin-top: 22px; }
-
 .why { padding: clamp(32px, 5vw, 64px) 0; border-top: 1px solid var(--line); margin-top: 24px; }
 .grid.installers { grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); }
 .installers .card {
