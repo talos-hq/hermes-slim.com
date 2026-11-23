@@ -93,6 +93,7 @@ h3 { margin: 0; }
 .release-line { color: var(--dim); margin-top: 22px; }
 
 .why { padding: clamp(32px, 5vw, 64px) 0; border-top: 1px solid var(--line); margin-top: 24px; }
+.grid.installers { grid-template-columns: repeat(auto-fit, minmax(min(360px, 100%), 1fr)); }
 .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; margin-top: 18px; }
 .why-grid h3 { font-size: 19px; margin-bottom: 6px; }
 .why-grid p { color: #bdbdbd; margin: 0; }
